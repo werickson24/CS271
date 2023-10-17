@@ -1,8 +1,8 @@
 /****************************************
  * C-ploration 2 for CS 271
  * 
- * [NAME] $YOUR_NAME$
- * [TERM] FALL $YEAR$
+ * [NAME] $WilliamErickson$
+ * [TERM] FALL $2023$
  * 
  ****************************************/
 
@@ -25,10 +25,12 @@
  */
 int length(char* txt) {
 	int len = 0;
-	
-	/* REPLACE WITH YOUR CODE */
-
-	return len;  
+	int i = 0;
+	while(txt[i] != '\0'){
+		len++;
+		i++;
+	}
+	return len;
 }
 
 
@@ -48,8 +50,10 @@ int length(char* txt) {
 char *welcome(char* hello, char* name) {
 	// dynamically allocate a new string
 	char *message = malloc(sizeof(char)*MAX_LIMIT);
-		
-	/* REPLACE WITH YOUR CODE */
+	strcpy(message, hello);
+	strcat(message, " ");
+	strcat(message, name);
+	strcat(message, "!");
 	
 	return message;	
 }
@@ -66,9 +70,10 @@ char *welcome(char* hello, char* name) {
  * returns: nothing. result contains the reversed string.
  */
 void reverse(char* txt, char* result) {
-
-	/* REPLACE WITH YOUR CODE */
-	
+	int len = length(txt);
+	for(int i = 0; i <= len; i++){
+		result[i] = txt[(len - 1) - i];
+	}
 }
 
 
@@ -82,11 +87,23 @@ void reverse(char* txt, char* result) {
  * returns: integer count of vowels
  */
 int vowels(char* txt) {
-	int vowel = 0;
+	int vowelCount = 0;
+	int len = length(txt);
+	
+	for(int i = 0; i < len; i++){
+		char letter = txt[i];
+		int isVowel = (
+			letter == 'A' || letter == 'E' || letter == 'I' || letter == 'O' || letter == 'U' ||
+			letter == 'a' || letter == 'e' || letter == 'i' || letter == 'o' || letter == 'u'
+		);
+		
+		if(isVowel){
+			vowelCount++;
+		}
+	}
+	
 
-	/* REPLACE WITH YOUR CODE */
-
-	return vowel;
+	return vowelCount;
 }
 
 
@@ -105,10 +122,23 @@ int vowels(char* txt) {
  * returns: integer quarter [1..4]
  */
 int quartile(char* name) {
-
-	/* REPLACE WITH YOUR CODE */
+	int quartile;
+	int difference = strcmp(name, "@");
 	
-	return -1; // <==fix!
+	
+	if(difference > 0 && difference <= 6){
+		quartile = 1;
+	}else if (difference > 6 && difference <= 14){
+		quartile = 2;
+	}else if (difference > 14 && difference <= 22){
+		quartile = 3;
+	}else if (difference > 22 && difference <= 132){
+		quartile = 4;
+	}else{
+		quartile = -1;
+	}
+	
+	return quartile;
 }
 
 
