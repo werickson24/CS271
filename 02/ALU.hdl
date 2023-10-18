@@ -54,4 +54,22 @@ CHIP ALU {
 	Not16(in = zymux, out = notzy); //negate y
 	Mux16(a = zymux, b = notzy, sel = ny, out = ymux); //select y or negated y
 	
+	//f processing
+	Add16(a = xmux, b = ymux, out = xyadd);
+	
+	And16(a = xmux, b = ymux, out = xyand);
+	
+	Mux16(a = xyand, b = xyadd, sel = f, out = xydone);
+	
+	//no processing
+	Not16(in = xydone, out = xydonenot);
+	Mux16(a = xydone, b = xydonenot, sel = no, out = out, out[15] = ng, out[0..7] = xyout07, out[8..15] = xyout815);//output and segmentation of other needed output parts
+	
+	//zr checking
+	Or8Way(in = xyout07, out = xyor08);
+	Or8Way(in = xyout815, out = xyor815);
+	Or(a = xyor08, b = xyor815, out = xyor16way);
+	Not(in = xyor16way, out = zr);
+	
+	
 }
