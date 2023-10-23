@@ -16,5 +16,12 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+	
+	Inc16(in = reg, out = reginc);//increment existing value
+	
+	Mux16(a = reg, b = reginc, sel = inc, out = incmux);//choose wether to use the incremented value or not
+	Mux16(a = incmux, b = in, sel = load, out = loadmux);//choose wether to use stored/inc value or input value
+	Mux16(a = loadmux, b[0..15] = false, sel = reset, out = resetmux);//choose or zero out value
+	
+	Register(in = resetmux, load = true, out = out, out = reg);
 }
