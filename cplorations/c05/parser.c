@@ -56,8 +56,36 @@ void parse(FILE * file){
 		strip(line);
 		
 		if(*line){
+			char inst_type = is_Atype(line) ? 'A' : '\0';
+			inst_type = is_label(line) ? 'L' : inst_type;
+			inst_type = is_Ctype(line) ? 'C' : inst_type;
+			printf("%c  ", inst_type);
 			printf("%s\n", line);
 		}
+		
 	}
 	
+}
+
+bool is_Atype(const char *line){
+	char Astart = '@';
+	return (*line == Astart);
+}
+
+bool is_label(const char *line){
+	int end_index = strlen(line) - 1;
+	if(*line == '(' && *(line + end_index) == ')'){
+		return true;
+	}else{
+		return false;
+	}
+	
+}
+
+bool is_Ctype(const char *line){
+	if(!is_Atype(line) && !is_label(line)){
+		return true;
+	}else{
+		return false;
+	}
 }
