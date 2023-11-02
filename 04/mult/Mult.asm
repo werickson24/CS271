@@ -10,3 +10,45 @@
 // R0 >= 0, R1 >= 0, and R0*R1 < 32768.
 
 // Put your code here.
+
+//set R2 to 0
+@2
+M=0
+
+//if either inputs are 0, end
+@0
+D=M
+@END
+D;JEQ
+
+@1
+D=M
+@END
+D;JEQ
+
+(LOOP)
+//Load R2 
+@2
+D=M
+
+//Add R0
+@0
+D=D+M
+
+//Store in R2
+@2
+M=D
+
+//Decrement iterator R1
+@1
+D=M
+D=D-1
+M=D
+
+//loop if iterator > 0
+@LOOP
+D;JGT
+
+(END)
+@END
+0;JMP
