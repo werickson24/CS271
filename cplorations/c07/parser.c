@@ -1,5 +1,5 @@
 /****************************************
- * C-ploration 4 for CS 271
+ * C-ploration 7 for CS 271
  * 
  * [NAME] $William Erickson$
  * [TERM] FALL $2023$
@@ -50,24 +50,30 @@ char *strip(char *s){
 void parse(FILE * file){
 	
 	char line[MAX_LINE_LENGTH];
+	int line_num = 0;
 	
 	while (fgets(line, sizeof(line), file) != NULL){
 		
 		strip(line);
 		
 		if(*line){
+			line_num++;
 			char inst_type = is_Atype(line) ? 'A' : '\0';
 			inst_type = is_label(line) ? 'L' : inst_type;
 			inst_type = is_Ctype(line) ? 'C' : inst_type;
-			printf("%c  ", inst_type);
+			//printf("%c  ", inst_type);
 			
 			if(inst_type == 'L'){
+				line_num--;
 				char label_line[MAX_LABEL_LENGTH];
 				extract_label(line, label_line);
-				printf("%s\n", label_line);
-			}else{
-				printf("%s\n", line);
+				strcpy(line, label_line);
+				
+				symtable_insert(line, line_num);
 			}
+			
+			
+			//printf("%s\n", line);
 		}
 		
 	}
@@ -98,13 +104,12 @@ bool is_Ctype(const char *line){
 }
 
 char *extract_label(const char *line, char* label){
-	char buffer[MAX_LABEL_LENGTH];
 	int i = 0;
+	//Line is taking i + 1 to simply ignore the lines first (
 	while(line[i + 1] != ')' && i < MAX_LABEL_LENGTH){
-		buffer[i] = line[i + 1];
+		label[i] = line[i + 1];
 		i++;
 	}
-	buffer[i] = '\0';
-	strcpy(label, buffer);
+	label[i] = '\0';
 	return label;
 }

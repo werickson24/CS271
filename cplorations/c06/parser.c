@@ -64,10 +64,11 @@ void parse(FILE * file){
 			if(inst_type == 'L'){
 				char label_line[MAX_LABEL_LENGTH];
 				extract_label(line, label_line);
-				printf("%s\n", label_line);
-			}else{
-				printf("%s\n", line);
+				strcpy(line, label_line);
 			}
+			
+			
+			printf("%s\n", line);
 		}
 		
 	}
@@ -98,13 +99,12 @@ bool is_Ctype(const char *line){
 }
 
 char *extract_label(const char *line, char* label){
-	char buffer[MAX_LABEL_LENGTH];
 	int i = 0;
+	//Line is taking i + 1 to simply ignore the lines first (
 	while(line[i + 1] != ')' && i < MAX_LABEL_LENGTH){
-		buffer[i] = line[i + 1];
+		label[i] = line[i + 1];
 		i++;
 	}
-	buffer[i] = '\0';
-	strcpy(label, buffer);
+	label[i] = '\0';
 	return label;
 }

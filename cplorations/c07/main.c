@@ -16,6 +16,7 @@ int main(int argc, const char *argv[])
 		if(fin != NULL){
 			
 			parse(fin);
+			symtable_print_labels();
 			
 			fclose(fin);
 			
