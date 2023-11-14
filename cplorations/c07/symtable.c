@@ -5,14 +5,14 @@ Symbol * hashArray[SYMBOL_TABLE_SIZE];
 //Hash function
 int hash_string(char * str){
 	//djb2 hash algorithm
-	int hash = 5381;
+	unsigned long hash = 5381;
 	int c;
 	
 	while((c = *str++)){
 		hash = ((hash << 5) + hash) + c;
 	}
 	
-	return abs(hash);
+	return hash % SYMBOL_TABLE_SIZE;
 }
 
 int index_wrap(int index){
@@ -20,8 +20,7 @@ int index_wrap(int index){
 }
 
 int get_hash(char * str){
-	int hash_result = hash_string(str);
-	return index_wrap(hash_result);
+	return hash_string(str);
 }
 //Hash functions end
 
@@ -65,10 +64,11 @@ void symtable_display_table(){
 	printf("\n");
 }
 
-void symtable_print_labels(){  
-    for(int i = 0; i < SYMBOL_TABLE_SIZE; i++) {
+void symtable_print_labels(){ 
+	int i = 0;
+    for(i = 0; i < SYMBOL_TABLE_SIZE; i++) {
         if(hashArray[i] != NULL){
-		printf("{%s,%d}\n",hashArray[i]->key,hashArray[i]->addr);
+			printf("{%s,%d}\n",hashArray[i]->key,hashArray[i]->addr);
         }
     }
 }
