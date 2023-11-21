@@ -16,7 +16,7 @@ int main(int argc, const char *argv[])
 		if(fin != NULL){
 			
 			parse(fin);
-			symtable_print_labels();
+			//symtable_print_labels();
 			//printf("{fail tester}");
 			fclose(fin);
 			
