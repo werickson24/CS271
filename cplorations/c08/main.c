@@ -6,6 +6,7 @@
  * 
  ****************************************/
 #include "parser.h"
+#include "error.h"
 
 int main(int argc, const char *argv[])
 {
@@ -21,12 +22,11 @@ int main(int argc, const char *argv[])
 			fclose(fin);
 			
 		}else{
-			perror("Unable to open file!");
-			exit(EXIT_FAILURE);
+			exit_program(EXIT_CANNOT_OPEN_FILE, argv[1]);
 		}
 	}else{
-		printf("Usage: %s [filename]\n", argv[0]);
-		exit(EXIT_FAILURE);
+		// incorrect number of arguments
+		exit_program(EXIT_INCORRECT_ARGUMENTS, argv[0]); 
 	}
 }
 

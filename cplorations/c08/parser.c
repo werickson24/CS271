@@ -50,29 +50,44 @@ char *strip(char *s){
 void parse(FILE * file){
 	
 	char line[MAX_LINE_LENGTH];
-	int line_num = 0;
+	unsigned int line_num = 0;
+	unsigned int instr_num = 0;
 	
 	while (fgets(line, sizeof(line), file) != NULL){
+		//Likely off by one error in max compare
+		if(instr_num > MAX_INSTRUCTIONS){
+			exit_program(EXIT_TOO_MANY_INSTRUCTIONS, MAX_INSTRUCTIONS + 1);
+		}
 		
 		strip(line);
 		
+		line_num++;
 		if(*line){
-			line_num++;
+			
 			char inst_type = is_Atype(line) ? 'A' : '\0';
 			inst_type = is_label(line) ? 'L' : inst_type;
 			inst_type = is_Ctype(line) ? 'C' : inst_type;
 			
 			if(inst_type == 'L'){
-				line_num--;
 				char label_line[MAX_LABEL_LENGTH];
 				extract_label(line, label_line);
 				strcpy(line, label_line);
 				
-				symtable_insert(line, line_num);
+
+				if(!isalpha(line[0])){
+					exit_program(EXIT_INVALID_LABEL, line_num, line);
+				}
+				
+				if(symtable_find(line) != NULL){
+					exit_program(EXIT_SYMBOL_ALREADY_EXISTS, line_num, line);
+				}
+				
+				symtable_insert(line, instr_num);
+			}else{
+				
+				printf("%u: %c  %s\n", instr_num, inst_type, line);
+				instr_num++;
 			}
-			
-			
-			printf("%u: %c  %s\n", line_num, inst_type, line);
 		}
 		
 	}

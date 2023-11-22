@@ -28,7 +28,7 @@ Symbol * symtable_find(char * key){
 	int hashIndex = get_hash(key);
 	
 	while(hashArray[hashIndex] != NULL){
-		if(strcmp(hashArray[hashIndex]->key, key)){
+		if(!strcmp(hashArray[hashIndex]->key, key)){
 			return hashArray[hashIndex];
 		}
 		hashIndex++;

@@ -1,5 +1,6 @@
-#define __PARSER_H__
 #ifndef __PARSER_H__
+#define __PARSER_H__
+
 
 /****************************************
  * C-ploration 8 for CS 271
@@ -15,6 +16,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "symtable.h"
+#include "error.h"
 
 #define MAX_LINE_LENGTH  200
 #define MAX_LABEL_LENGTH (MAX_LINE_LENGTH - 2)
