@@ -27,5 +27,18 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+	//use upper bit for a bit load selection
+	DMux(in = load, sel = address[14], a = loada, b = loadb);
+	
+	//ram uses 14 bits for lower 16K of address
+    RAM16K(in = in, load = loada, address = address[0..13], out = ramout);
+	
+	//screen uses 13 bits for middle 8k of address
+	Screen(in = in, load = loadb, address = address[0..12], out = screenout);
+	
+	Keyboard(out = keysout);
+	
+	//channel 3 through 4 way for ease of use
+	//a = b
+	Mux4Way16(a = ramout , b = ramout, c = screenout, d = keysout, sel = address[13..14], out = out);
 }
