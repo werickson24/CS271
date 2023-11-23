@@ -39,8 +39,72 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    
+	//interface
+	Mux16(a = false, b = instruction, sel = instruction[15],
+		//jump
+		out[0] = cJGT,
+		out[1] = cJEQ,
+		out[2] = cJLT,
+		//dest
+		out[3] = cDestM, out[3] = writeM,
+		out[4] = cDestD,
+		out[5] = cDestA,
+		//comp
+		out[6] = cCompNo,
+		out[7] = cCompF,
+		out[8] = cCompNy,
+		out[9] = cCompZy,
+		out[10] = cCompNx,
+		out[11] = cCompZx,
+		//comp a or type
+		out[12] = cAMType,
+		//type
+		out[15] = cType
+	);
+	
+    //use top bit for A/C instruction direction (instruction or Alu input)
+	Mux16(a = instruction, b = ALUout, sel = cType, out = instructionout);
+		
+	//a m mux to alu
+	Mux16(a = AregOut, b = inM, sel = cAMType, out = ammux);
+	
+	//check wether to load A
+	Not(in = cType, out = notType);
+	Or(a = notType, b = cDestA, out = loadA);
+	
+	//a register
+	ARegister(in = instructionout, load = loadA, out = AregOut, out[0..14] = addressM);
+
+	
+	//d register
+	DRegister(in = ALUout, load = cDestD, out = DregOut);
 	
 	
+	ALU(
+		x = DregOut,
+		y = ammux,
+		zx = cCompZx,
+		nx = cCompNx,
+		zy = cCompZy,
+		ny = cCompNy,
+		f = cCompF,
+		no = cCompNo,
+		out = ALUout,
+		out = outM,
+		zr = ALUoutzero,
+		ng = ALUoutneg
+	);
+	//JGT setup
+	Or(a = ALUoutzero, b = ALUoutneg, out = LTEQ);
+	Not(in = LTEQ, out = GT);
 	
+	
+	//jump and PC
+	And(a = cJGT, b = GT, out = JGT);
+	And(a = cJEQ, b = ALUoutzero, out = JEQ);
+	And(a = cJLT, b = ALUoutneg, out = JLT);
+	Or(a = JGT, b = JEQ, out = JGE);
+	Or(a = JGE, b = JLT, out = JUMP);
+
+	PC(in = AregOut, load = JUMP, inc = true, reset = reset, out[0..14] = pc, out[15] = false);
 }
