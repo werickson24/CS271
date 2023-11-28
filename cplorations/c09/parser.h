@@ -17,6 +17,7 @@
 #include <stdint.h>
 #include "symtable.h"
 #include "error.h"
+#include "hack.h"
 
 #define MAX_LINE_LENGTH  200
 #define MAX_LABEL_LENGTH (MAX_LINE_LENGTH - 2)
