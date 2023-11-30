@@ -70,4 +70,64 @@ static const predefined_symbol predefined_symbols[NUM_PREDEFINED_SYMBOLS] = {
     
 };
 
+typedef enum jump_id {
+	JMP_INVALID = -1,
+	JMP_NULL,
+	JMP_JGT,
+	JMP_JEQ,
+	JMP_JGE,
+	JMP_JLT,
+	JMP_JNE,
+	JMP_JLE,
+	JMP_JMP
+	
+} jump_id;
+
+typedef enum dest_id{
+	DEST_INVALID = -1,
+	DEST_NULL,
+	DEST_M,
+	DEST_D,
+	DEST_MD,
+	DEST_A,
+	DEST_AM,
+	DEST_AD,
+	DEST_AMD
+} dest_id;
+
+typedef enum comp_id{
+	COMP_INVALID = -1,
+	//a = 0
+	COMP_0 = 42,
+	COMP_1 = 63,
+	COMP_NEG_1 = 58,
+	COMP_D = 12,
+	COMP_A = 48,
+	COMP_NOT_D = 13,
+	COMP_NOT_A = 49,
+	COMP_NEG_D = 15,
+	COMP_NEG_A = 51,
+	COMP_D_PLUS_1 = 31,
+	COMP_A_PLUS_1 = 55,
+	COMP_D_NEG_1 = 14,
+	COMP_A_NEG_1 = 50,
+	COMP_D_PLUS_A = 2,
+	COMP_D_NEG_A = 19,
+	COMP_A_NEG_D = 7,
+	COMP_D_AND_A = 0,
+	COMP_D_OR_A = 21,
+	
+	//a = 1
+	COMP_M = 112,
+	COMP_NOT_M = 113,
+	COMP_NEG_M = 115,
+	COMP_M_PLUS_1 = 119,
+	COMP_M_NEG_1 = 114,
+	COMP_D_PLUS_M = 66,
+	COMP_D_NEG_M = 83,
+	COMP_M_NEG_D = 71,
+	COMP_D_AND_M = 64,
+	COMP_D_OR_M = 85
+} comp_id;
+
 #endif
