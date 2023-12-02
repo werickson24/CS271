@@ -1,11 +1,12 @@
 /****************************************
- * C-ploration 7 for CS 271
+ * C-ploration 10 for CS 271
  * 
  * [NAME] $William Erickson$
  * [TERM] FALL $2023$
  * 
  ****************************************/
 #include "parser.h"
+#include "hack.h"
 
 /* Function: strip
  * -------------
@@ -47,7 +48,7 @@ char *strip(char *s){
  *
  * returns: nothing
  */
-void parse(FILE * file){
+int parse(FILE * file, instruction * instructions){
 	
 	char line[MAX_LINE_LENGTH];
 	unsigned int line_num = 0;
@@ -66,7 +67,6 @@ void parse(FILE * file){
 		
 		line_num++;
 		if(*line){
-			
 			char inst_type = is_Atype(line) ? 'A' : '\0';
 			inst_type = is_label(line) ? 'L' : inst_type;
 			inst_type = is_Ctype(line) ? 'C' : inst_type;
@@ -86,22 +86,48 @@ void parse(FILE * file){
 				}
 				
 				symtable_insert(line, instr_num);
-			}else if(inst_type == 'A'){
-				if(parse_A_instruction(line, &instr.instrs.ainst)){
-					instr.type = atype;
-				}else{
-					exit_program(EXIT_INVALID_A_INSTR, line_num, line);
-				}
-				instr_num++;
 			}else{
-				
-				//printf("%u: %c  %s\n", instr_num, inst_type, line);
-				instr_num++;
+				if(inst_type == 'A'){
+					if(parse_A_instruction(line, &instr.instrs.ainst)){
+						instr.type = atype;
+					}else{
+						exit_program(EXIT_INVALID_A_INSTR, line_num, line);
+					}
+					instr_num++;
+					
+					
+					//output for tester
+					if(instr.instrs.ainst.is_addr){
+						printf("A: %d\n", instr.instrs.ainst.atypes.address);
+					}else{
+						printf("A: %s\n", instr.instrs.ainst.atypes.label);
+					}
+					
+				}else if(inst_type == 'C'){
+					char tmp_line[MAX_LINE_LENGTH];
+					strcpy(tmp_line, line);//copy line to avoid manipulating the original
+					parse_C_instruction(tmp_line, &instr.instrs.cinst);
+					instr.type = ctype;
+					
+					if(instr.instrs.cinst.dest == DEST_INVALID){
+						//printf("dest invalid with value: %d\n", instr.instrs.cinst.dest);
+						exit_program(EXIT_INVALID_C_DEST, line_num, line);
+					}else if(instr.instrs.cinst.comp == COMP_INVALID){
+						
+						exit_program(EXIT_INVALID_C_COMP, line_num, line);
+					}else if(instr.instrs.cinst.jump == JMP_INVALID){
+						exit_program(EXIT_INVALID_C_JUMP, line_num, line);
+					}
+					
+					//tester output
+					printf("C: d=%d, c=%d, j=%d\n", instr.instrs.cinst.dest, instr.instrs.cinst.comp, instr.instrs.cinst.jump);
+				}
+				instructions[instr_num++] = instr;
 			}
 		}
 		
 	}
-	
+	return instr_num;
 }
 
 bool is_Atype(const char *line){
@@ -164,6 +190,47 @@ bool parse_A_instruction(const char *line, a_instruction *instr){
 		instr->is_addr = false;
 	}
 	return true;
+	
+}
+
+void parse_C_instruction(char *line, c_instruction *instr){
+	//tokenization process 
+	// D = D + A;JMP
+	// first token splits jump from instruction
+	// D = D + A |;| JMP
+	// second token splits instruction into dest and comp
+	// D |=| D+A |;| JMP
+	
+	
+	//split off instruction token
+	char * instr_token = strtok(line, ";");
+	//printf("instr_tokenization token: %s\n", instr_token);
+	
+	//store jump token
+	char * jump_token = strtok(NULL, ";");
+	//printf("jump_tokenization token: %s\n", jump_token);
+	
+	//split dest off instruction token
+	char * dest_token = strtok(instr_token, "=");
+	//printf("dest_tokenization token: %s\n", dest_token);
+	
+	//store comp token
+	char * comp_token = strtok(NULL, "=");
+	//printf("comp_tokenization token: %s\n", comp_token);
+
+	//if comp is null, then we use dest in its place
+	if(comp_token == NULL){
+		comp_token = dest_token;
+		dest_token = NULL;
+	}
+	
+	int a = -1;
+	instr->comp = str_to_compid(comp_token, &a);
+	instr->a = a;
+	
+	instr->dest = str_to_destid(dest_token);
+	
+	instr->jump = str_to_jumpid(jump_token);
 	
 }
 

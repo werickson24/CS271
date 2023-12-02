@@ -33,14 +33,12 @@ typedef enum symbol_id {
 } symbol_id;
 
 typedef struct predefined_symbol {
-	//mentioned in the instructions but not sure what it means yet V 
-	//mostly do now, double check tho
-	//Make sure your string is long enough to hold the longest name among the predefined symbols.
+
 	char name[11];
 	int16_t address;
 } predefined_symbol;
 
-//this whole thing doesnt work ...?
+
 static const predefined_symbol predefined_symbols[NUM_PREDEFINED_SYMBOLS] = {
     {"R0", SYM_R0},
     {"R1", SYM_R1},
@@ -83,6 +81,28 @@ typedef enum jump_id {
 	
 } jump_id;
 
+static inline jump_id str_to_jumpid(const char *s){
+	jump_id id = JMP_INVALID;
+	if (s == NULL) {
+		id = JMP_NULL;
+	} else if (strcmp(s, "JGT") == 0){
+		id = JMP_JGT;
+	}else if (strcmp(s, "JEQ") == 0){
+		id = JMP_JEQ;
+	}else if (strcmp(s, "JGE") == 0){
+		id = JMP_JGE;
+	}else if (strcmp(s, "JLT") == 0){
+		id = JMP_JLT;
+	}else if (strcmp(s, "JNE") == 0){
+		id = JMP_JNE;
+	}else if (strcmp(s, "JLE") == 0){
+		id = JMP_JLE;
+	}else if (strcmp(s, "JMP") == 0){
+		id = JMP_JMP;
+	}
+	return id;
+};
+
 typedef enum dest_id{
 	DEST_INVALID = -1,
 	DEST_NULL,
@@ -94,6 +114,28 @@ typedef enum dest_id{
 	DEST_AD,
 	DEST_AMD
 } dest_id;
+
+static inline dest_id str_to_destid(const char *s){
+	dest_id id = DEST_INVALID;
+	if(s == NULL){
+		id = DEST_NULL;
+	}else if (strcmp(s, "M") == 0){
+		id = DEST_M;
+	}else if (strcmp(s, "D") == 0){
+		id = DEST_D;
+	}else if (strcmp(s, "MD") == 0){
+		id = DEST_MD;
+	}else if (strcmp(s, "A") == 0){
+		id = DEST_A;
+	}else if (strcmp(s, "AM") == 0){
+		id = DEST_AM;
+	}else if (strcmp(s, "AD") == 0){
+		id = DEST_AD;
+	}else if (strcmp(s, "AMD") == 0){
+		id = DEST_AMD;
+	}
+	return id;
+};
 
 typedef enum comp_id{
 	COMP_INVALID = -1,
@@ -118,6 +160,8 @@ typedef enum comp_id{
 	COMP_D_OR_A = 21,
 	
 	//a = 1
+	//old values
+	/*
 	COMP_M = 112,
 	COMP_NOT_M = 113,
 	COMP_NEG_M = 115,
@@ -128,6 +172,110 @@ typedef enum comp_id{
 	COMP_M_NEG_D = 71,
 	COMP_D_AND_M = 64,
 	COMP_D_OR_M = 85
+	*/
+	COMP_M = 48,
+	COMP_NOT_M = 49,
+	COMP_NEG_M = 51,
+	COMP_M_PLUS_1 = 55,
+	COMP_M_NEG_1 = 50,
+	COMP_D_PLUS_M = 2,
+	COMP_D_NEG_M = 19,
+	COMP_M_NEG_D = 7,
+	COMP_D_AND_M = 0,
+	COMP_D_OR_M = 21
 } comp_id;
+
+static inline comp_id str_to_compid(const char *s, int *a){
+
+	comp_id id = COMP_INVALID;
+	if(strcmp(s, "0") == 0){
+		id = COMP_0;
+		*a = 0;
+	}else if(strcmp(s, "1") == 0){
+		id = COMP_1;
+		*a = 0;
+	}else if(strcmp(s, "-1") == 0){
+		id = COMP_NEG_1;
+		*a = 0;
+	}else if(strcmp(s, "D") == 0){
+		id = COMP_D;
+		*a = 0;
+	}else if(strcmp(s, "A") == 0){
+		id = COMP_A;
+		*a = 0;
+	}else if(strcmp(s, "!D") == 0){
+		id = COMP_NOT_D;
+		*a = 0;
+	}else if(strcmp(s, "!A") == 0){
+		id = COMP_NOT_A;
+		*a = 0;
+	}else if(strcmp(s, "-D") == 0){
+		id = COMP_NEG_D;
+		*a = 0;
+	}else if(strcmp(s, "-A") == 0){
+		id = COMP_NEG_A;
+		*a = 0;
+	}else if(strcmp(s, "D+1") == 0){
+		id = COMP_D_PLUS_1;
+		*a = 0;
+	}else if(strcmp(s, "A+1") == 0){
+		id = COMP_A_PLUS_1;
+		*a = 0;
+	}else if(strcmp(s, "D-1") == 0){
+		id = COMP_D_NEG_1;
+		*a = 0;
+	}else if(strcmp(s, "A-1") == 0){
+		id = COMP_D_NEG_1;
+		*a = 0;
+	}else if(strcmp(s, "D+A") == 0){
+		id = COMP_D_PLUS_A;
+		*a = 0;
+	}else if(strcmp(s, "D-A") == 0){
+		id = COMP_D_NEG_A;
+		*a = 0;
+	}else if(strcmp(s, "A-D") == 0){
+		id = COMP_A_NEG_D;
+		*a = 0;
+	}else if(strcmp(s, "D&A") == 0){
+		id = COMP_D_AND_A;
+		*a = 0;
+	}else if(strcmp(s, "D|A") == 0){
+		id = COMP_D_OR_A;
+		*a = 0;
+	}else if(strcmp(s, "M") == 0){
+		//A = 1
+		id = COMP_M;
+		*a = 1;
+	}else if(strcmp(s, "!M") == 0){
+		id = COMP_NOT_M;
+		*a = 1;
+	}else if(strcmp(s, "-M") == 0){
+		id = COMP_NEG_M;
+		*a = 1;
+	}else if(strcmp(s, "M+1") == 0){
+		id = COMP_M_PLUS_1;
+		*a = 1;
+	}else if(strcmp(s, "M-1") == 0){
+		id = COMP_M_NEG_1;
+		*a = 1;
+	}else if(strcmp(s, "D+M") == 0){
+		id = COMP_D_PLUS_M;
+		*a = 1;
+	}else if(strcmp(s, "D-M") == 0){
+		id = COMP_D_NEG_M;
+		*a = 1;
+	}else if(strcmp(s, "M-D") == 0){
+		id = COMP_M_NEG_D;
+		*a = 1;
+	}else if(strcmp(s, "D&M") == 0){
+		id = COMP_D_AND_M;
+		*a = 1;
+	}else if(strcmp(s, "D|M") == 0){
+		id = COMP_D_OR_M;
+		*a = 1;
+	}	
+	//printf("str_to_compid, comp: %s, to: %d\n", s, id);
+	return id;
+};
 
 #endif

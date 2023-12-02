@@ -3,7 +3,7 @@
 
 
 /****************************************
- * C-ploration 8 for CS 271
+ * C-ploration 10 for CS 271
  * 
  * [NAME] $William Erickson$
  * [TERM] FALL $2023$
@@ -61,7 +61,7 @@ typedef struct instruction{
 /** function prototypes **/
 char *strip(char *s);
 
-void parse(FILE * file);
+int parse(FILE * file, instruction * instructions);
 
 bool is_Atype(const char *line);
 
@@ -72,6 +72,8 @@ bool is_Ctype(const char *line);
 char *extract_label(const char *line, char* label);
 
 bool parse_A_instruction(const char *line, a_instruction *instr);
+
+void parse_C_instruction(char *line, c_instruction *instr);
 
 void add_predefined_symbols();
 
