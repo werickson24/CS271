@@ -138,20 +138,23 @@ void assemble(const char * file_name, instruction * instructions, int num_instru
 	//FILE *fout = fopen(new_file_name, "w");
 	//WIP
 	
-	instruction * cur_instr = instruction;
+	instruction * cur_instr;
+	opcode opcode_res;
 	
 	for(int i = 0; i < num_instructions; i++){
 		cur_instr = instructions[i];
 		if(cur_instr->type == atype){
 			if(cur_instr->instrs.ainst.is_addr){
-				//set opcode as address
+				opcode_res = cur_instr->instrs.ainst.atypes.address;
 			}else{
-				//label...
+				//labels...
+				printf("label being ignored");
+				opcode_res = 0;
 			}
 		}else if(cur_instr->type == ctype){
-			instruction_to_opcode(*cur_instr);
+			opcode_res = instruction_to_opcode(*cur_instr);
 		}
-		//macro opcode
+		printf("opcode: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", OPCODE_TO_BINARY(opcode_res));
 	}
 	//WIP
 	fclose(fout);

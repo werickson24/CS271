@@ -5,12 +5,9 @@
 
 // Computes R0 = 2 + 3  (R0 refers to RAM[0])
 
-(LOL)
 @2
-(LOL)
 D=A
 @3
 D=D+A
-(lol2)
 @0
 M=D
