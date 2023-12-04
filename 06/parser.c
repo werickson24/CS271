@@ -116,6 +116,7 @@ int parse(FILE * file, instruction * instructions){
 						
 						exit_program(EXIT_INVALID_C_COMP, line_num, line);
 					}else if(instr.instrs.cinst.jump == JMP_INVALID){
+						//printf("jump failed with value: %d", instr.instrs.cinst.jump);
 						exit_program(EXIT_INVALID_C_JUMP, line_num, line);
 					}
 					
@@ -147,13 +148,13 @@ void assemble(const char * file_name, instruction * instructions, int num_instru
 				opcode_res = cur_instr.instrs.ainst.atypes.address;
 			}else{
 				//labels...
-				printf("label being ignored");
+				printf("label being ignored\n");
 				opcode_res = 0;
 			}
 		}else if(cur_instr.type == ctype){
 			opcode_res = instruction_to_opcode(cur_instr.instrs.cinst);
 		}
-		printf("opcode: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", OPCODE_TO_BINARY(opcode_res));
+		printf("opcode: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(opcode_res));
 		//fputs();
 	}
 	fclose(fout);
@@ -268,7 +269,6 @@ void parse_C_instruction(char *line, c_instruction *instr){
 	instr->dest = str_to_destid(dest_token);
 	
 	instr->jump = str_to_jumpid(jump_token);
-	
 }
 
 void add_predefined_symbols(){
