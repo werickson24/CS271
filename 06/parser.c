@@ -135,28 +135,27 @@ void assemble(const char * file_name, instruction * instructions, int num_instru
 	strcpy(new_file_name, file_name);
 	strcat(new_file_name, ".hack");
 	
-	//FILE *fout = fopen(new_file_name, "w");
-	//WIP
+	FILE *fout = fopen(new_file_name, "w");
 	
-	instruction * cur_instr;
+	instruction cur_instr;
 	opcode opcode_res;
 	
 	for(int i = 0; i < num_instructions; i++){
 		cur_instr = instructions[i];
-		if(cur_instr->type == atype){
-			if(cur_instr->instrs.ainst.is_addr){
-				opcode_res = cur_instr->instrs.ainst.atypes.address;
+		if(cur_instr.type == atype){
+			if(cur_instr.instrs.ainst.is_addr){
+				opcode_res = cur_instr.instrs.ainst.atypes.address;
 			}else{
 				//labels...
 				printf("label being ignored");
 				opcode_res = 0;
 			}
-		}else if(cur_instr->type == ctype){
-			opcode_res = instruction_to_opcode(*cur_instr);
+		}else if(cur_instr.type == ctype){
+			opcode_res = instruction_to_opcode(cur_instr.instrs.cinst);
 		}
 		printf("opcode: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", OPCODE_TO_BINARY(opcode_res));
+		//fputs();
 	}
-	//WIP
 	fclose(fout);
 }
 
@@ -218,7 +217,6 @@ bool parse_A_instruction(const char *line, a_instruction *instr){
 	long result = strtol(s, &s_end, 10);
 	
 	if(s == s_end){
-		//printf("parse_a: strings equal");
 		instr->atypes.label = (char *)malloc(line_length);
 		strcpy(instr->atypes.label, s);
 		instr->is_addr = false;

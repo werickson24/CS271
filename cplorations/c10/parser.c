@@ -177,7 +177,7 @@ bool parse_A_instruction(const char *line, a_instruction *instr){
 	long result = strtol(s, &s_end, 10);
 	
 	if(s == s_end){
-		//printf("parse_a: strings equal");
+		printf("copying to lable, s:%s ", s);
 		instr->atypes.label = (char *)malloc(line_length);
 		strcpy(instr->atypes.label, s);
 		instr->is_addr = false;
@@ -187,7 +187,7 @@ bool parse_A_instruction(const char *line, a_instruction *instr){
 	}else{
 		//printf("parse_a: third thing");
 		instr->atypes.address = result;
-		instr->is_addr = false;
+		instr->is_addr = true;
 	}
 	return true;
 	
