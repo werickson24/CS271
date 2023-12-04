@@ -65,8 +65,7 @@ void symtable_display_table(){
 }
 
 void symtable_print_labels(){ 
-	int i = 0;
-    for(i = 0; i < SYMBOL_TABLE_SIZE; i++) {
+    for(int i = 0; i < SYMBOL_TABLE_SIZE; i++) {
         if(hashArray[i] != NULL){
 			printf("{%s,%d}\n",hashArray[i]->key,hashArray[i]->addr);
         }

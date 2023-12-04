@@ -19,11 +19,12 @@ int main(int argc, const char *argv[])
 		if(fin != NULL){
 			instruction * instructions = malloc(MAX_INSTRUCTION_COUNT * sizeof(instruction));
 			
-			int num_instructions = parse(fin, instructions);
+			//int num_instructions = 
+			parse(fin, instructions);
 			
 			//symtable_print_labels();
 			
-			printf("num_instructions: %d", num_instructions);
+			//printf("num_instructions: %d", num_instructions);
 			fclose(fin);
 			free(instructions);
 		}else{

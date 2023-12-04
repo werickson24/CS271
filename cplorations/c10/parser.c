@@ -62,7 +62,7 @@ int parse(FILE * file, instruction * instructions){
 		if(instr_num > MAX_INSTRUCTIONS){
 			exit_program(EXIT_TOO_MANY_INSTRUCTIONS, MAX_INSTRUCTIONS + 1);
 		}
-		
+		//printf("Line_num: %d, line: %s", line_num, line);
 		strip(line);
 		
 		line_num++;
@@ -121,8 +121,9 @@ int parse(FILE * file, instruction * instructions){
 					
 					//tester output
 					printf("C: d=%d, c=%d, j=%d\n", instr.instrs.cinst.dest, instr.instrs.cinst.comp, instr.instrs.cinst.jump);
+					instr_num++;
 				}
-				instructions[instr_num++] = instr;
+				instructions[instr_num] = instr;
 			}
 		}
 		

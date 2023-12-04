@@ -225,7 +225,7 @@ static inline comp_id str_to_compid(const char *s, int *a){
 		id = COMP_D_NEG_1;
 		*a = 0;
 	}else if(strcmp(s, "A-1") == 0){
-		id = COMP_D_NEG_1;
+		id = COMP_A_NEG_1;
 		*a = 0;
 	}else if(strcmp(s, "D+A") == 0){
 		id = COMP_D_PLUS_A;
