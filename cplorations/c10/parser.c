@@ -177,15 +177,12 @@ bool parse_A_instruction(const char *line, a_instruction *instr){
 	long result = strtol(s, &s_end, 10);
 	
 	if(s == s_end){
-		printf("copying to lable, s:%s ", s);
 		instr->atypes.label = (char *)malloc(line_length);
 		strcpy(instr->atypes.label, s);
 		instr->is_addr = false;
 	}else if(*s_end != 0){
-		//printf("parse_a: strings not equal, %s, %s", s_end, s);
 		return false;
 	}else{
-		//printf("parse_a: third thing");
 		instr->atypes.address = result;
 		instr->is_addr = true;
 	}

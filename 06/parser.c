@@ -221,12 +221,10 @@ bool parse_A_instruction(const char *line, a_instruction *instr){
 		strcpy(instr->atypes.label, s);
 		instr->is_addr = false;
 	}else if(*s_end != 0){
-		//printf("parse_a: strings not equal, %s, %s", s_end, s);
 		return false;
 	}else{
-		//printf("parse_a: third thing");
 		instr->atypes.address = result;
-		instr->is_addr = false;
+		instr->is_addr = true;
 	}
 	return true;
 	

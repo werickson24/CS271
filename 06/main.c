@@ -21,12 +21,10 @@ int main(int argc, const char *argv[])
 			
 			int num_instructions = parse(fin, instructions);
 			
-			//symtable_print_labels();
-			
 			printf("num_instructions: %d\n", num_instructions);
 			fclose(fin);
 			
-			//assemble(argv[1], instructions, num_instructions);
+			assemble(argv[1], instructions, num_instructions);
 			
 			free(instructions);
 		}else{
