@@ -85,7 +85,7 @@ int parse(FILE * file, instruction * instructions){
 					exit_program(EXIT_SYMBOL_ALREADY_EXISTS, line_num, line);
 				}
 				
-				symtable_insert(line, instr_num);
+				symtable_insert(line, instr_num);//THIS MUST BE BROKEN
 			}else{
 				if(inst_type == 'A'){
 					if(parse_A_instruction(line, &instr.instrs.ainst)){
@@ -149,16 +149,18 @@ void assemble(const char * file_name, instruction * instructions, int num_instru
 			if(cur_instr.instrs.ainst.is_addr){
 				opcode_res = cur_instr.instrs.ainst.atypes.address;
 			}else{
-				printf("assembling label: %s, ", cur_instr.instrs.ainst.atypes.label);
+				//printf("assembling label: %s, ", cur_instr.instrs.ainst.atypes.label);
 				//opcode_res = 0;
 				//labels... 
 				
-				Symbol * label = malloc(sizeof(Symbol)); //cast appears to be unnececesary 
-				label = symtable_find(cur_instr.instrs.ainst.atypes.label);
+				//Symbol * label = NULL: // = malloc(sizeof(Symbol)); //cast appears to be unnececesary 
+				Symbol * label = symtable_find(cur_instr.instrs.ainst.atypes.label);
 				if(label != NULL){
 					opcode_res = label->addr;
+					//printf("found label\n");
 				}else{
 					opcode_res = next_label_address;
+					//printf("inserting label: %s address: %d into symtable\n", cur_instr.instrs.ainst.atypes.label, next_label_address);
 					symtable_insert(cur_instr.instrs.ainst.atypes.label, next_label_address);
 					next_label_address++;
 				}
@@ -166,14 +168,14 @@ void assemble(const char * file_name, instruction * instructions, int num_instru
 				
 				//printf("label being ignored: '%s'\n", cur_instr.instrs.ainst.atypes.label);
 				//opcode_res = 0;
-				free(label);
+				//free(label); //this deletes stuff from symtable
 				
 			}
 		}else if(cur_instr.type == ctype){
 			opcode_res = instruction_to_opcode(cur_instr.instrs.cinst);
 		}
 		printf("opcode: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(opcode_res));
-		//fputs();
+		fprintf(fout, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(opcode_res));
 	}
 	fclose(fout);
 }

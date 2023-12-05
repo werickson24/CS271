@@ -26,16 +26,19 @@ int get_hash(char * str){
 
 Symbol * symtable_find(char * key){
 	int hashIndex = get_hash(key);
-	printf("symtable_find: looking for key: %s with hash: %d, result:\n", key, hashIndex);
+	//printf("symtable_find: looking for key: %s with hash: %d, result:\n", key, hashIndex);
 	while(hashArray[hashIndex] != NULL){
-		if(!strcmp(hashArray[hashIndex]->key, key)){
-			printf("found\n");
+		//this breaks when the second R1 comes through
+		//current situation:
+		//R1 key breaks this, hashIndex of r1 is 664
+		if(strcmp(hashArray[hashIndex]->key, key) == 0){
+			//printf("found\n");
 			return hashArray[hashIndex];
 		}
 		hashIndex++;
 		hashIndex = index_wrap(hashIndex);
 	}
-	printf("not found\n");
+	//printf("not found\n");
 	return NULL;
 }
 
