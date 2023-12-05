@@ -93,7 +93,7 @@ int parse(FILE * file, instruction * instructions){
 					}else{
 						exit_program(EXIT_INVALID_A_INSTR, line_num, line);
 					}
-					instr_num++;
+					//instr_num++;
 					
 					
 					//output for tester
@@ -122,9 +122,9 @@ int parse(FILE * file, instruction * instructions){
 					
 					//tester output
 					printf("C: d=%d, c=%d, j=%d\n", instr.instrs.cinst.dest, instr.instrs.cinst.comp, instr.instrs.cinst.jump);
-					instr_num++;
+					//instr_num++;
 				}
-				instructions[instr_num] = instr;
+				instructions[instr_num++] = instr;
 			}
 		}
 		
@@ -141,6 +141,7 @@ void assemble(const char * file_name, instruction * instructions, int num_instru
 	
 	instruction cur_instr;
 	opcode opcode_res;
+	hack_addr next_label_address = 16;
 	
 	for(int i = 0; i < num_instructions; i++){
 		cur_instr = instructions[i];
@@ -148,9 +149,25 @@ void assemble(const char * file_name, instruction * instructions, int num_instru
 			if(cur_instr.instrs.ainst.is_addr){
 				opcode_res = cur_instr.instrs.ainst.atypes.address;
 			}else{
-				//labels...
-				printf("label being ignored\n");
-				opcode_res = 0;
+				printf("assembling label: %s, ", cur_instr.instrs.ainst.atypes.label);
+				//opcode_res = 0;
+				//labels... 
+				
+				Symbol * label = malloc(sizeof(Symbol)); //cast appears to be unnececesary 
+				label = symtable_find(cur_instr.instrs.ainst.atypes.label);
+				if(label != NULL){
+					opcode_res = label->addr;
+				}else{
+					opcode_res = next_label_address;
+					symtable_insert(cur_instr.instrs.ainst.atypes.label, next_label_address);
+					next_label_address++;
+				}
+				
+				
+				//printf("label being ignored: '%s'\n", cur_instr.instrs.ainst.atypes.label);
+				//opcode_res = 0;
+				free(label);
+				
 			}
 		}else if(cur_instr.type == ctype){
 			opcode_res = instruction_to_opcode(cur_instr.instrs.cinst);
