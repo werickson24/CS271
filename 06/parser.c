@@ -85,7 +85,7 @@ int parse(FILE * file, instruction * instructions){
 					exit_program(EXIT_SYMBOL_ALREADY_EXISTS, line_num, line);
 				}
 				
-				symtable_insert(line, instr_num);//THIS MUST BE BROKEN
+				symtable_insert(line, instr_num);
 			}else{
 				if(inst_type == 'A'){
 					if(parse_A_instruction(line, &instr.instrs.ainst)){
