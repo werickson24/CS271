@@ -1,2 +1,2 @@
-usage: ./main [filename]
-output: filename.hack
+##usage: ./main [filename]
+##output: filename.hack
